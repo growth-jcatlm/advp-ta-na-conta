@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flexibilização do ADVP — Campanha Tá na Conta | odptech Growth</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--od-orange:#E85C0D;--od-teal:#0D7377;--od-gray:#F5F4F0;--od-text:#2C2C2A}
+html,body{width:100%;min-height:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--od-text);background:#fff;line-height:1.5}
+
+.hero{background:#fff;border-bottom:3px solid var(--od-gray);padding:2.5rem 2.5rem 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--od-orange),var(--od-teal))}
+.hero-inner{padding-left:.5rem}
+.logo-odptech{display:flex;align-items:center;font-size:1.5rem;font-weight:700;letter-spacing:-.03em;margin-bottom:1.25rem;line-height:1}
+.logo-odptech .od{color:var(--od-orange)}
+.logo-odptech .p-box{background:var(--od-teal);color:#fff;padding:1px 5px;border-radius:4px;margin:0 2px}
+.logo-odptech .tech{color:var(--od-text)}
+.logo-growth{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--od-orange);border-radius:6px;padding:4px 12px 4px 7px;margin-bottom:1.25rem}
+.growth-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;color:var(--od-orange);text-transform:uppercase}
+.hero-tag{font-size:.68rem;font-weight:700;letter-spacing:.1em;color:var(--od-orange);text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:.75rem}
+.hero-tag::before{content:'';width:28px;height:2px;background:var(--od-orange);border-radius:2px}
+.hero h1{font-size:2rem;font-weight:700;color:var(--od-orange);line-height:1.15;margin-bottom:.4rem}
+.hero h2{font-size:1rem;font-weight:600;color:var(--od-teal);margin-bottom:1.25rem}
+.hero-meta{font-size:.82rem;color:#5F5E5A;line-height:2.1}
+.hero-meta strong{color:var(--od-text);font-weight:600}
+
+.kpi-banner{background:var(--od-gray);padding:2rem 2.5rem;border-left:6px solid var(--od-orange)}
+.kpi-banner-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;color:var(--od-orange);text-transform:uppercase;margin-bottom:.35rem}
+.kpi-banner h3{font-size:1.5rem;font-weight:700;color:var(--od-text);margin-bottom:.3rem}
+.kpi-banner>p{font-size:.88rem;color:#5F5E5A;margin-bottom:1.4rem}
+.kpi-banner>p strong{color:var(--od-text)}
+.kpi-grid-hero{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.kpi-h{background:#fff;border:1.5px solid #E8E6DF;border-radius:8px;padding:.9rem 1rem;text-align:center;border-top:3px solid var(--od-orange)}
+.kpi-h .val{font-size:1.35rem;font-weight:700;color:var(--od-orange)}
+.kpi-h .lbl{font-size:.6rem;font-weight:600;letter-spacing:.07em;color:#888;text-transform:uppercase;margin-top:3px}
+.kpi-h.teal{border-top-color:var(--od-teal)}.kpi-h.teal .val{color:var(--od-teal)}
+
+section{padding:2rem 2.5rem;border-bottom:1px solid #E8E6DF}
+.alt{background:var(--od-gray)}
+.sec-label{font-size:.63rem;font-weight:700;letter-spacing:.1em;color:var(--od-orange);text-transform:uppercase;margin-bottom:.2rem}
+.sec-heading{font-size:1.15rem;font-weight:700;color:var(--od-text);margin-bottom:1rem}
+.body-text{font-size:.88rem;color:#5F5E5A;line-height:1.75;max-width:800px}
+
+.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1rem}
+.info-card{background:var(--od-gray);border-radius:8px;padding:.9rem 1rem;border-left:3px solid var(--od-teal)}
+.alt .info-card{background:#fff}
+.info-card .ic-val{font-size:1rem;font-weight:700;color:var(--od-teal);margin-bottom:3px}
+.info-card .ic-lbl{font-size:.72rem;color:#888}
+
+.quote-box{background:#fff;border-left:4px solid var(--od-orange);border-radius:0 8px 8px 0;padding:1.1rem 1.4rem;margin:1.1rem 0}
+.alt .quote-box{background:#fff}
+.quote-box p{font-size:.95rem;font-style:italic;color:var(--od-text);line-height:1.65}
+
+.chart-subtitle{font-size:.77rem;font-weight:700;color:var(--od-text);margin-bottom:.5rem}
+.chart-card{background:#fff;border-radius:10px;padding:1.1rem;border:1px solid #E8E6DF}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem}
+
+.timeline{display:flex;margin:1.5rem 0;position:relative}
+.timeline::before{content:'';position:absolute;top:24px;left:0;right:0;height:2px;background:#E8E6DF;z-index:0}
+.tl-step{flex:1;text-align:center;position:relative;z-index:1}
+.tl-dot{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .5rem;font-size:1.1rem;border:2px solid transparent}
+.tl-dot.t1{background:#FFF2EA;border-color:var(--od-orange);color:var(--od-orange)}
+.tl-dot.t2{background:#E8F5F5;border-color:var(--od-teal);color:var(--od-teal)}
+.tl-dot.t3{background:var(--od-orange);color:#fff}
+.tl-dot.t4{background:var(--od-teal);color:#fff}
+.tl-dot.t5{background:var(--od-text);color:#fff}
+.tl-step h4{font-size:.78rem;font-weight:700;color:var(--od-text);margin-bottom:2px}
+.tl-step p{font-size:.68rem;color:#888}
+
+.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:1rem}
+.risk-card{background:#fff;border:1px solid #E8E6DF;border-radius:8px;border-top:3px solid #E24B4A;padding:1rem}
+.risk-card h4{font-size:.85rem;font-weight:700;color:var(--od-text);margin-bottom:.4rem}
+.risk-card p{font-size:.77rem;color:#5F5E5A;line-height:1.55}
+
+.result-cards{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:1.25rem 0}
+.rc{background:#fff;border:1px solid #E8E6DF;border-radius:8px;padding:.85rem .75rem;text-align:center}
+.rc .rv{font-size:1.2rem;font-weight:700}
+.rc .rl{font-size:.58rem;font-weight:600;letter-spacing:.05em;color:#888;text-transform:uppercase;margin-top:3px}
+.rc.orange{border-top:3px solid var(--od-orange)}.rc.orange .rv{color:var(--od-orange)}
+.rc.teal{border-top:3px solid var(--od-teal)}.rc.teal .rv{color:var(--od-teal)}
+
+.route-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:1.25rem}
+.route-card{border:1px solid #E8E6DF;border-radius:10px;padding:1.1rem;background:#fff}
+.route-card.rc-curta{border-top:4px solid var(--od-teal)}
+.route-card.rc-media{border-top:4px solid var(--od-orange)}
+.route-card.rc-longa{border-top:4px solid #B4B2A9}
+.rbadge{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.4rem;display:block}
+.rb-curta{color:var(--od-teal)}.rb-media{color:var(--od-orange)}.rb-longa{color:#888}
+.rstat{font-size:1.2rem;font-weight:700;margin:.25rem 0}
+.rsub{font-size:.77rem;color:#888;margin-bottom:.45rem}
+.route-card p{font-size:.77rem;color:#5F5E5A;line-height:1.55}
+
+.learn-item{display:flex;gap:1rem;align-items:flex-start;background:#fff;border:1px solid #E8E6DF;border-radius:10px;padding:1.15rem 1.3rem;margin-bottom:10px}
+.learn-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.3rem}
+.learn-icon.alert{background:#FFF2EA}
+.learn-icon.key{background:#E8F5F5}
+.learn-text h4{font-size:.92rem;font-weight:700;color:var(--od-text);margin-bottom:.35rem}
+.learn-text p{font-size:.82rem;color:#5F5E5A;line-height:1.65}
+.insight-tag{display:inline-flex;align-items:center;gap:5px;background:#FFF2EA;color:var(--od-orange);font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-top:.6rem}
+
+.rec-header{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem}
+.rec-header-icon{width:40px;height:40px;border-radius:8px;background:var(--od-teal);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem}
+.rec-header-text h3{font-size:1rem;font-weight:700;color:var(--od-text)}
+.rec-header-text p{font-size:.77rem;color:#888}
+.rec-block{background:#fff;border-radius:10px;padding:1.25rem;margin-bottom:10px}
+.rec-block-title{display:flex;align-items:center;gap:10px;margin-bottom:.8rem}
+.rec-tag{font-size:.63rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.rec-tag.nao{background:#FCEBEB;color:#A32D2D}
+.rec-tag.sim{background:#E8F5F5;color:var(--od-teal)}
+.rec-block h4{font-size:.9rem;font-weight:700;color:var(--od-text)}
+.rec-block>p{font-size:.82rem;color:#5F5E5A;line-height:1.65}
+.rec-block ul{list-style:none;margin-top:.7rem;display:flex;flex-direction:column;gap:8px}
+.rec-block ul li{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#5F5E5A;line-height:1.55}
+.rec-block ul li::before{content:'→';color:var(--od-teal);font-weight:700;flex-shrink:0;margin-top:1px}
+
+.conclusion{background:linear-gradient(135deg,#FFF2EA,#E8F5F5);border-radius:10px;padding:1.6rem;margin-top:1.4rem;border-left:5px solid var(--od-orange)}
+.conclusion h3{font-size:1rem;font-weight:700;color:var(--od-orange);margin-bottom:.65rem}
+.conclusion p{font-size:.86rem;color:var(--od-text);line-height:1.75}
+
+.leg{display:flex;gap:16px;flex-wrap:wrap;margin-top:.6rem}
+.leg span{font-size:.74rem;display:flex;align-items:center;gap:5px}
+.leg-dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.sdiv{height:1.5rem}
+
+/* Instrução de resize para Google Sites */
+#resize-hint{display:none}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="logo-odptech">
+      <span class="od">od</span><span class="p-box">p</span><span class="tech">tech</span>
+    </div>
+    <div class="logo-growth">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <rect width="22" height="22" rx="5" fill="#E85C0D"/>
+        <polyline points="3,16 8,10 12,13 19,6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="19" cy="6" r="2" fill="#fff"/>
+      </svg>
+      <span class="growth-label">Growth</span>
+    </div>
+    <div class="hero-tag">Experimento de growth</div>
+    <h1>Flexibilização do ADVP<br>na campanha Tá na Conta</h1>
+    <h2>Checkout / Aplicação de cupom | Teste de regra promocional</h2>
+    <div class="hero-meta">
+      <div><strong>Objetivo:</strong> reduzir erros de aplicação de cupom por data de viagem incorreta e trazer receita incremental.</div>
+      <div><strong>Site:</strong> sites UTP &nbsp;|&nbsp; <strong>Responsável:</strong> Bianca Gonçalves &nbsp;|&nbsp; <strong>Relatório:</strong> 27/04/26 &nbsp;|&nbsp; <strong>Última atualização:</strong> 27/04/26</div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI BANNER -->
+<div class="kpi-banner">
+  <div class="kpi-banner-label">Experimento · Campanha Tá na Conta</div>
+  <h3>ADVP 0: menos fricção, mais conversão</h3>
+  <p>A flexibilização da regra de antecedência de viagem reduziu erros em <strong>83%</strong> e gerou <strong>R$277K</strong> de receita incremental.</p>
+  <div class="kpi-grid-hero">
+    <div class="kpi-h"><div class="val">-83%</div><div class="lbl">Erros de cupom</div></div>
+    <div class="kpi-h"><div class="val">R$277K</div><div class="lbl">Receita incremental</div></div>
+    <div class="kpi-h teal"><div class="val">85%</div><div class="lbl">Meta atingida</div></div>
+    <div class="kpi-h teal"><div class="val">12.124</div><div class="lbl">Bilhetes</div></div>
+    <div class="kpi-h teal"><div class="val">7.365</div><div class="lbl">Transações</div></div>
+    <div class="kpi-h teal"><div class="val">61,2%</div><div class="lbl">Share PIX</div></div>
+  </div>
+</div>
+
+<!-- 01 CONTEXTO -->
+<section>
+  <div class="sec-label">01 · Contexto do problema</div>
+  <div class="sec-heading">Por que o ADVP gerava fricção no checkout?</div>
+  <p class="body-text">A campanha Tá na Conta vinculava o cupom a uma janela de antecedência de viagem. Usuários fora dessa janela recebiam erro no checkout — no momento de maior intenção de compra. O comportamento se repetia em julho, setembro, novembro, fevereiro e março.</p>
+  <div class="info-grid">
+    <div class="info-card"><div class="ic-val">2.382</div><div class="ic-lbl">Pico histórico de erros (06/02/26)</div></div>
+    <div class="info-card"><div class="ic-val">600–1.000</div><div class="ic-lbl">Erros/dia em dias promocionais</div></div>
+    <div class="info-card"><div class="ic-val">~265</div><div class="ic-lbl">Erros/dia durante o experimento</div></div>
+    <div class="info-card"><div class="ic-val">Checkout</div><div class="ic-lbl">Etapa crítica impactada</div></div>
+  </div>
+  <div style="margin-top:1.5rem">
+    <div class="chart-subtitle">Histórico de erros por data de viagem incorreta</div>
+    <div style="position:relative;width:100%;height:260px">
+      <canvas id="chartHistorico" role="img" aria-label="Histórico de erros com pico de 2382 em fevereiro e queda para 265 no experimento em março"></canvas>
+    </div>
+    <div class="leg">
+      <span><span class="leg-dot" style="background:#B4B2A9"></span>Dias normais</span>
+      <span><span class="leg-dot" style="background:#E85C0D"></span>Dias de promoção</span>
+      <span><span class="leg-dot" style="background:#0D7377"></span>Experimento (05–08/03)</span>
+    </div>
+    <p style="font-size:.73rem;color:#888;margin-top:.4rem;font-style:italic">Erros concentravam-se em dias promocionais. Durante o experimento, a queda foi expressiva.</p>
+  </div>
+</section>
+
+<!-- 02-03 DESAFIO -->
+<section class="alt">
+  <div class="sec-label">02–03 · Desafio e hipótese</div>
+  <div class="sec-heading">A pergunta central do experimento</div>
+  <div class="quote-box">
+    <p>"Se reduzirmos a complexidade da regra de ADVP, conseguimos diminuir erros no checkout e gerar receita incremental sem perder controle da campanha?"</p>
+  </div>
+  <p class="body-text">Ao liberar o cupom para qualquer data de viagem durante 05/03–08/03, esperávamos: redução de fricção na jornada, aumento de conversão, crescimento de transações e bilhetes, e maior atingimento da meta da campanha.</p>
+</section>
+
+<!-- 04 CONFIGURAÇÃO -->
+<section>
+  <div class="sec-label">04 · Configuração do experimento</div>
+  <div class="sec-heading">Como o teste foi estruturado</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="ic-val">Todos usuários UTP</div><div class="ic-lbl">Público impactado</div></div>
+    <div class="info-card"><div class="ic-val">05/03 a 08/03</div><div class="ic-lbl">Período do experimento</div></div>
+    <div class="info-card"><div class="ic-val">ADVP removido</div><div class="ic-lbl">Regra testada</div></div>
+    <div class="info-card"><div class="ic-val">Histórico + esperado</div><div class="ic-lbl">Tipo de comparação</div></div>
+  </div>
+</section>
+
+<!-- 05 CRONOGRAMA -->
+<section class="alt">
+  <div class="sec-label">05 · Cronograma</div>
+  <div class="sec-heading">Etapas do experimento</div>
+  <div class="timeline">
+    <div class="tl-step"><div class="tl-dot t1">📋</div><h4>Preparação</h4><p>D-7 a D-3</p></div>
+    <div class="tl-step"><div class="tl-dot t2">✓</div><h4>Validação</h4><p>D-2</p></div>
+    <div class="tl-step"><div class="tl-dot t3">🚀</div><h4>Go live</h4><p>05/03</p></div>
+    <div class="tl-step"><div class="tl-dot t4">📈</div><h4>Monitoramento</h4><p>D0 a D+3</p></div>
+    <div class="tl-step"><div class="tl-dot t5">🏁</div><h4>Consolidação</h4><p>D+4</p></div>
+  </div>
+  <p style="font-size:.77rem;color:#888;font-style:italic">Monitoramento diário de erros, receita, bilhetes, transações e PIX durante toda a janela do experimento.</p>
+</section>
+
+<!-- 06 RISCOS -->
+<section>
+  <div class="sec-label">06 · Riscos monitorados</div>
+  <div class="sec-heading">O que precisava ser acompanhado</div>
+  <div class="risk-grid">
+    <div class="risk-card"><h4>⚠ Vazamento do cupom</h4><p>Monitorar distribuição fora dos canais planejados — sites de cupons e agregadores promocionais.</p></div>
+    <div class="risk-card"><h4>↗ Concentração em rotas curtas</h4><p>Verificar se o impacto seria apenas em rotas curtas ou também em médias e longas.</p></div>
+    <div class="risk-card"><h4>↘ Uso sem incrementalidade</h4><p>Identificar se o desconto subsidiava compras que ocorreriam de qualquer forma.</p></div>
+  </div>
+</section>
+
+<!-- 07 RESULTADOS -->
+<section class="alt">
+  <div class="sec-label">07 · Resultados</div>
+  <div class="sec-heading">Impacto do experimento</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-subtitle">Erros/dia: antes vs. durante o experimento</div>
+      <div style="position:relative;width:100%;height:200px">
+        <canvas id="chartErros" role="img" aria-label="Erros antes 1560 vs durante 265 — redução de 83%"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-subtitle">Atingimento da meta com e sem ADVP aberto</div>
+      <div style="position:relative;width:100%;height:200px">
+        <canvas id="chartMeta" role="img" aria-label="Meta 85% com ADVP aberto vs 62% estimado sem abertura"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="chart-subtitle">KPIs consolidados</div>
+  <div class="result-cards">
+    <div class="rc orange"><div class="rv">-83%</div><div class="rl">Erros cupom</div></div>
+    <div class="rc orange"><div class="rv">R$277K</div><div class="rl">Receita incr.</div></div>
+    <div class="rc teal"><div class="rv">R$1,02M</div><div class="rl">Tarifa líquida</div></div>
+    <div class="rc teal"><div class="rv">85%</div><div class="rl">Meta atingida</div></div>
+    <div class="rc teal"><div class="rv">12.124</div><div class="rl">Bilhetes</div></div>
+    <div class="rc teal"><div class="rv">92%</div><div class="rl">Meta bilhetes</div></div>
+    <div class="rc orange"><div class="rv">7.365</div><div class="rl">Transações</div></div>
+    <div class="rc orange"><div class="rv">61,2%</div><div class="rl">Share PIX</div></div>
+  </div>
+</section>
+
+<!-- 08 ROTAS -->
+<section>
+  <div class="sec-label">08 · Análise por tipo de rota</div>
+  <div class="sec-heading">Onde o impacto foi mais concentrado</div>
+  <div class="chart-subtitle">Distribuição de bilhetes por tipo de rota</div>
+  <div style="position:relative;width:100%;height:180px">
+    <canvas id="chartRotas" role="img" aria-label="Rotas curtas 76%, médias 17%, longas 5%"></canvas>
+  </div>
+  <div class="leg" style="margin-bottom:1.3rem">
+    <span><span class="leg-dot" style="background:#0D7377"></span>Rotas curtas 76%</span>
+    <span><span class="leg-dot" style="background:#E85C0D"></span>Rotas médias 17%</span>
+    <span><span class="leg-dot" style="background:#B4B2A9"></span>Rotas longas 5%</span>
+  </div>
+  <div class="route-grid">
+    <div class="route-card rc-curta">
+      <span class="rbadge rb-curta">Rotas curtas</span>
+      <div class="rstat">76% dos bilhetes</div>
+      <div class="rsub">Média de 3,66 bilhetes/cliente</div>
+      <p>Maior concentração de vendas, comportamento recorrente, menor planejamento. Alta sensibilidade à redução de fricção.</p>
+    </div>
+    <div class="route-card rc-media">
+      <span class="rbadge rb-media">Rotas médias</span>
+      <div class="rstat">17% dos bilhetes</div>
+      <div class="rsub">Média de 2,35 bilhetes/cliente</div>
+      <p>Volume intermediário com mistura de compra por impulso e planejamento. Pode ser testada seletivamente.</p>
+    </div>
+    <div class="route-card rc-longa">
+      <span class="rbadge rb-longa">Rotas longas</span>
+      <div class="rstat">5% dos bilhetes</div>
+      <div class="rsub">Média de 2,03 bilhetes/cliente</div>
+      <p>Maior dependência de cupom, decisão racional e planejada. Menor sensibilidade à abertura do ADVP.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 + 10 APRENDIZADOS E RECOMENDAÇÕES -->
+<section class="alt">
+  <div class="sec-label">09 · Aprendizados</div>
+  <div class="sec-heading">Os aprendizados</div>
+
+  <div class="learn-item">
+    <div class="learn-icon alert">⚡</div>
+    <div class="learn-text">
+      <h4>O alerta da diluição de receita</h4>
+      <p>Após análise profunda, identificamos que a maioria das compras teve ADVP de 0 a 2 dias — viagem imediata. Usuários de rotas curtas com viagem imediata geralmente têm alta necessidade de compra e tenderiam a comprar pelo preço cheio. Ao dar o desconto de forma ampla, podemos ter diluído a receita de quem já compraria sem cupom.</p>
+      <span class="insight-tag">💡 Insight</span>
+    </div>
+  </div>
+
+  <div class="learn-item">
+    <div class="learn-icon key">🔑</div>
+    <div class="learn-text">
+      <h4>Simplificação como alavanca de conversão</h4>
+      <p>O teste confirmou que regras complexas matam a conversão. O ganho de <strong>R$277K</strong> representa o dinheiro que estávamos "deixando na mesa" por conta de uma trava que o usuário não entendia e que gerava erro no momento mais crítico da jornada de compra.</p>
+    </div>
+  </div>
+
+  <div class="sdiv"></div>
+  <div class="sec-label">10 · Recomendações</div>
+  <div class="sec-heading" style="margin-top:.25rem">Os aprendizados e recomendações</div>
+
+  <div class="rec-header">
+    <div class="rec-header-icon">💡</div>
+    <div class="rec-header-text">
+      <h3>Recomendação estratégica para o produto</h3>
+      <p>Com base nos resultados e no alerta de diluição identificado</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-block-title">
+      <span class="rec-tag nao">Não recomendado</span>
+      <h4>Liberar o ADVP de forma geral</h4>
+    </div>
+    <p>Não recomendamos a liberação total do ADVP em todas as rotas. A abertura ampla tende a viciar a base de usuários com desconto, comprometendo a margem em compras que aconteceriam de qualquer forma — especialmente em viagens imediatas de rotas curtas.</p>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-block-title">
+      <span class="rec-tag sim">Ação cirúrgica</span>
+      <h4>Implementar ADVP segmentado e recuperação em tempo real</h4>
+    </div>
+    <p>Sugerimos ao time de Produto duas abordagens de precisão:</p>
+    <ul>
+      <li>Implementar regras de ADVP <strong>segmentadas por rota</strong> — critérios diferentes para rotas curtas, médias e longas, conforme perfil de compra e margem de cada segmento.</li>
+      <li>Flexibilizar automaticamente apenas quando o sistema identificar que o usuário <strong>já tentou aplicar o cupom e falhou</strong> — recuperação de carrinho em tempo real, sem abrir o desconto para toda a base.</li>
+    </ul>
+  </div>
+
+  <div class="conclusion">
+    <h3>Conclusão executiva</h3>
+    <p>O experimento provou que a regra de ADVP era uma barreira real de conversão — e que simplificá-la tem valor financeiro mensurável. O desafio agora é ser cirúrgico: capturar o ganho de conversão sem diluir receita de quem já compraria. A combinação de ADVP segmentado por rota e recuperação automática por tentativa de erro é o caminho mais eficiente para o produto escalar esse aprendizado.</p>
+  </div>
+</section>
+
+<script>
+const gC='rgba(0,0,0,.06)',tC='#888';
+const OG='rgba(232,92,13,.8)',OGB='#E85C0D';
+const TL='rgba(13,115,119,.8)',TLB='#0D7377';
+const GR='rgba(180,178,169,.55)',GRB='#B4B2A9';
+
+new Chart(document.getElementById('chartHistorico'),{
+  type:'bar',
+  data:{
+    labels:['Jul/25','Jul/25','Set/25','Set/25','Nov/25','Nov/25','Fev/26','02/02','06/02','05/03','06/03','07/03','08/03','Mar/26'],
+    datasets:[{
+      label:'Erros',
+      data:[180,750,220,820,190,900,1100,1350,2382,280,250,270,260,150],
+      backgroundColor:['n','p','n','p','n','p','p','p','p','e','e','e','e','n'].map(t=>t==='n'?GR:t==='p'?OG:TL),
+      borderColor:['n','p','n','p','n','p','p','p','p','e','e','e','e','n'].map(t=>t==='n'?GRB:t==='p'?OGB:TLB),
+      borderWidth:1.5,borderRadius:3
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw} erros`}}},
+    scales:{
+      x:{ticks:{color:tC,font:{size:10},maxRotation:45,autoSkip:false},grid:{color:gC}},
+      y:{ticks:{color:tC,font:{size:11}},grid:{color:gC},title:{display:true,text:'Erros/dia',color:tC,font:{size:11}}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartErros'),{
+  type:'bar',
+  data:{labels:['Antes (dias promo)','Durante experimento'],datasets:[{data:[1560,265],backgroundColor:[OG,TL],borderColor:[OGB,TLB],borderWidth:1.5,borderRadius:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw} erros/dia`}}},scales:{x:{ticks:{color:tC,font:{size:11}},grid:{color:gC}},y:{ticks:{color:tC,font:{size:11}},grid:{color:gC},max:1800}}}
+});
+
+new Chart(document.getElementById('chartMeta'),{
+  type:'bar',
+  data:{labels:['Com ADVP aberto','Sem abertura (est.)'],datasets:[{data:[85,62],backgroundColor:[TL,GR],borderColor:[TLB,GRB],borderWidth:1.5,borderRadius:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw}%`}}},scales:{x:{ticks:{color:tC,font:{size:10}},grid:{color:gC}},y:{ticks:{color:tC,font:{size:11},callback:v=>v+'%'},grid:{color:gC},max:100}}}
+});
+
+new Chart(document.getElementById('chartRotas'),{
+  type:'doughnut',
+  data:{labels:['Rotas curtas','Rotas médias','Rotas longas'],datasets:[{data:[76,17,5],backgroundColor:[TL,OG,GR],borderColor:[TLB,OGB,GRB],borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw}%`}}}}
+});
+
+// Envia altura real ao parent para Google Sites ajustar o iframe
+function sendHeight(){
+  const h = document.body.scrollHeight;
+  window.parent.postMessage({type:'setHeight',height:h},'*');
+}
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+setTimeout(sendHeight, 800);
+</script>
+</body>
+</html>
